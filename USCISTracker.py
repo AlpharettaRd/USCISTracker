@@ -63,16 +63,25 @@ def main():
         print(myCaseInfo)
         inputFile = open(caseCacheFile, 'r')
         jsonCaseDict = json.load(inputFile, encoding='utf8')
+        isUpdate = False
         for index, oneCase in enumerate(jsonCaseDict['cases']):
             oneCaseUpdated = getCaseInfo(oneCase['caseNumber'])
             if oneCase['caseState'] != oneCaseUpdated['caseState'] or oneCase['lastUpdatedDate'] != oneCaseUpdated['lastUpdatedDate']:
+                if not isUpdate:
+                    isUpdate = True
+                jsonCaseDict['cases'][index] = oneCaseUpdated
                 print("{0} is updated on {1} from {2} to {3}.".format(oneCase['caseNumber'], oneCaseUpdated['lastUpdatedDate'], oneCase['caseState'], oneCaseUpdated['caseState']))
             print('Processed {0}/{1}\r'.format(index + 1, len(jsonCaseDict['cases'])), end='')
+        if isUpdate:
+            outfile = io.open(caseCacheFile, 'w', encoding='utf8')
+            jsonCaseDict['refreshDate'] = date.today().strftime("%Y-%m-%d")
+            data = json.dumps(jsonCaseDict, sort_keys=False, ensure_ascii=False, indent=2)
+            outfile.write(data)
         print('Complete {0}'.format(len(jsonCaseDict['cases'])))
     else:
         monitorNumber = -100
         relatedCaseList = findRelatedCase(myCase, monitorNumber)
-        casesDict = {'caseNumber': myCase, 'trackNumber': monitorNumber, 'createdDate:': date.today().strftime("%Y-%m-%d"), 'cases': relatedCaseList}
+        casesDict = {'caseNumber': myCase, 'trackNumber': monitorNumber, 'createdDate:': date.today().strftime("%Y-%m-%d"), 'refreshDate': date.today().strftime("%Y-%m-%d"), 'cases': relatedCaseList}
         outfile = io.open(caseCacheFile, 'w', encoding='utf8')
         data = json.dumps(casesDict, sort_keys=False, ensure_ascii=False, indent=2)
         outfile.write(data)
