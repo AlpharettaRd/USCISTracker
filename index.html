@@ -1,15 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大师吴健雄</title>
-</head>
-<body>
-    <h1>大师吴健雄</h1>
-    <video controls style="width: 100%; height: auto;">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #f5f5f5;
+    }
+
+    /* 外层容器：负责居中 + 最大宽度限制 */
+    .video-wrapper {
+        max-width: 800px;     /* 大屏幕时的内容宽度 */
+        margin: 0 auto;        /* 居中关键 */
+        padding: 16px;       /* 默认左右 padding（大屏也需要） */
+        box-sizing: border-box;
+    }
+
+    /* 视频容器 */
+    video {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
+    }
+
+</style>
+
+<div class="video-wrapper">
+    <video controls>
         <source src="https://gatech.instructure.com/files/68542589/download?download_frd=1&verifier=Q2oWGG4ElTidV6vVpofrewXQBZg2CSN5zNYh08uj" type="video/mp4">
-        Your browser does not support the video tag.
+        您的浏览器不支持视频播放。
     </video>
-</body>
-</html>
+</div>
